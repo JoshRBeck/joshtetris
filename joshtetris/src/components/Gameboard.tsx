@@ -1,15 +1,14 @@
+import { ShapeID } from "../types/types";
+ 
+type Props = {
+  board: ShapeID[][]
+}
 
-
-const GameBoard: React.FC = () => {
-
-const BoardWidth = 12
-const BoardHeight = 24
-
-const Board = Array.from({ length: BoardHeight }, () => Array(BoardWidth).fill(0));
+const GameBoard: React.FC<Props> = ({ board }) => {
 
 return (
     <div className="board">
-      {Board.map((row, rowIndex) => (
+      {board.map((row, rowIndex) => (
         <div key={rowIndex} className="row">
           {row.map((cell, columnIndex) => (
             <div key={columnIndex} className={`cell cell-${cell}`}></div>

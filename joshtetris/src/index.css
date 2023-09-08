@@ -6,7 +6,6 @@
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
-
 }
 body {
   margin: 0;
@@ -27,16 +26,42 @@ body {
     background-color: #f9f9f9;
   }
 }
-.board {
-  display: grid;
+.row {
+  display: flex;
+  flex-direction: row;
+  /* display: grid;
   grid-template-columns: repeat(12, 30px);
   grid-gap: 2px;
   background-color: #333;
-  border: 2px solid #444;
+  border: 2px solid #444; */
 }
 .cell {
   width: 30px;
   height: 30px;
   background-color: #ccc;
   border: 2px solid #444;
+}
+.cell-0 {
+  background-color: #ccc;
+}
+.cell-1 {
+  background-color: blue;
+}
+.cell-2 {
+  background-color: red;
+}
+.cell-3 {
+  background-color: green;
+}
+.cell-4 {
+  background-color: orange;
+}
+.cell-5 {
+  background-color: purple;
+}
+.cell-6 {
+  background-color: turquoise;
+}
+.cell-7 {
+  background-color: yellow;
 }
