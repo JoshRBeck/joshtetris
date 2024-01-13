@@ -14,8 +14,24 @@ function isValidMove(
   tetromino: ShapeID[][],
   offset: { x: number; y: number }
 ): boolean {
-  // todo writeh this code
-  return true;
+  if (
+    offset.x >= 0 &&
+    offset.x + tetromino[0].length <= BoardWidth &&
+    offset.y >= 0 &&
+    offset.y + tetromino.length <= BoardHeight
+  ) {
+    for (let i = 0; i < tetromino.length; i++) {
+      for (let j = 0; j < tetromino[0].length; j++) {
+        const tetrominoCell = tetromino[i][j];
+        const boardCell = board[offset.y + i][offset.x + j];
+        if (tetrominoCell !== ShapeID.None && boardCell !== ShapeID.None) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+  return false;
 }
 
 function App() {
@@ -47,25 +63,39 @@ function App() {
       }
     }
     if (e.code === "ArrowDown") {
-      setOffset((current) => ({
-        x: current.x,
-        y: current.y + 1,
-      }));
+      if (
+        isValidMove(board, currentTetromino, { x: offset.x, y: offset.y + 1 })
+      ) {
+        setOffset((current) => ({
+          x: current.x,
+          y: current.y + 1,
+        }));
+      }
     }
     if (e.code === "ArrowLeft") {
-      setOffset((current) => ({
-        x: current.x - 1,
-        y: current.y,
-      }));
+      if (
+        isValidMove(board, currentTetromino, { x: offset.x - 1, y: offset.y })
+      ) {
+        setOffset((current) => ({
+          x: current.x - 1,
+          y: current.y,
+        }));
+      }
     }
     if (e.code === "ArrowRight") {
-      setOffset((current) => ({
-        x: current.x + 1,
-        y: current.y,
-      }));
+      if (
+        isValidMove(board, currentTetromino, { x: offset.x + 1, y: offset.y })
+      ) {
+        setOffset((current) => ({
+          x: current.x + 1,
+          y: current.y,
+        }));
+      }
     }
     if (e.code === "Space") {
-      setBoard(renderState);
+      if (isValidMove(board, currentTetromino, { x: offset.x, y: offset.y })) {
+        setBoard(renderState);
+      }
     }
     console.log(e);
   };
@@ -80,4 +110,3 @@ function App() {
 export default App;
 
 // Next goals: Collision, bottom lock in detection, new tetromino added when in place
-
