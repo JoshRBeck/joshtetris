@@ -34,6 +34,27 @@ function isValidMove(
   return false;
 }
 
+function clearCompletedRows(
+  board: ShapeID[][],
+  tetromino: ShapeID[][],
+  offset: { x: number; y: number }
+) {
+  // Check if each row in the tetromino is complete
+  for (let i = 0; i < tetromino.length; i++) {
+    const rowToCheck = offset.y + i;
+    // Check if the row is within board bounds
+    if (rowToCheck >= 0 && rowToCheck < BoardHeight) {
+      const isRowComplete = board[rowToCheck].every(
+        (cell) => cell !== ShapeID.None
+      );
+      // If the row is complete, clear it by filling with ShapeID.none
+      if (isRowComplete) {
+        board[rowToCheck] = Array(BoardWidth).fill(ShapeID.None);
+      }
+    }
+  }
+}
+
 function App() {
   const [offset, setOffset] = useState({ x: 2, y: 5 });
   const [board, setBoard] = useState<ShapeID[][]>(
@@ -42,6 +63,23 @@ function App() {
     )
   );
 
+  function updateBoardWithFrozenTetromino(
+    board: ShapeID[][],
+    currentTetromino: ShapeID[][],
+    offset: { x: number; y: number }
+  ) {
+    const newMatrix = cloneMatrix(board);
+
+    for (let i = 0; i < currentTetromino.length; i++) {
+      for (let j = 0; j < currentTetromino[0].length; j++) {
+        const tetrominoCell = currentTetromino[i][j];
+        if (tetrominoCell !== ShapeID.None) {
+          newMatrix[offset.y + i][offset.x + j] = tetrominoCell;
+        }
+      }
+    }
+    setBoard(newMatrix);
+  }
   const renderState = cloneMatrix(board);
   const currentTetromino = cloneMatrix(Shapes[ShapeID.T]);
 
@@ -52,6 +90,31 @@ function App() {
   });
 
   const handleKeyUp: React.KeyboardEventHandler = (e) => {
+    if (e.code === "ArrowDown") {
+      // Check for collision with bottom or existing blocks
+      if (
+        !isValidMove(board, currentTetromino, { x: offset.x, y: offset.y + 1 })
+      ) {
+        // Handle collision (e.g., freeze the tetromino)
+        // Update the board with the frozen tetromino
+        updateBoardWithFrozenTetromino(board, currentTetromino, offset);
+
+        // Check and clear completed rows
+        clearCompletedRows(board, currentTetromino, offset);
+
+        // Spawn a new tetromino at the starting position
+        spawnNewTetromino();
+
+        // Log for demonstration, you can remove this in the final version
+        console.log("Collision detected. Tetromino locked in place.");
+      } else {
+        // Move down only if the move is valid
+        setOffset((current) => ({
+          x: current.x,
+          y: current.y + 1,
+        }));
+      }
+    }
     if (e.code === "ArrowUp") {
       if (
         isValidMove(board, currentTetromino, { x: offset.x, y: offset.y - 1 })
@@ -59,16 +122,6 @@ function App() {
         setOffset((current) => ({
           x: current.x,
           y: current.y - 1,
-        }));
-      }
-    }
-    if (e.code === "ArrowDown") {
-      if (
-        isValidMove(board, currentTetromino, { x: offset.x, y: offset.y + 1 })
-      ) {
-        setOffset((current) => ({
-          x: current.x,
-          y: current.y + 1,
         }));
       }
     }
@@ -109,4 +162,4 @@ function App() {
 
 export default App;
 
-// Next goals: Collision, bottom lock in detection, new tetromino added when in place
+// Next goals: bottom lock in detection, new tetromino added when in place
