@@ -7,7 +7,6 @@ import {
   BoardHeight,
   cloneMatrix,
   isValidMove,
-  clearCompletedRows,
   updateBoardWithFrozenTetromino,
   spawnNewTetromino,
 } from "./logic";
@@ -22,7 +21,12 @@ function App() {
 
   const renderState = cloneMatrix(board);
   const currentTetromino = cloneMatrix(Shapes[ShapeID.T]);
-
+  console.log(
+    "renderState:",
+    renderState,
+    "current tetromino: ",
+    currentTetromino
+  );
   currentTetromino.forEach((row, r) => {
     row.forEach((cell, c) => {
       renderState[r + offset.y][c + offset.x] = cell;
@@ -34,6 +38,10 @@ function App() {
       if (
         !isValidMove(board, currentTetromino, { x: offset.x, y: offset.y + 1 })
       ) {
+        console.log("Before updating frozen board:");
+        console.log("Current Tetromino:", currentTetromino);
+        console.log("Offset:", offset);
+        console.log("Board:", board);
         updateBoardWithFrozenTetromino(
           board,
           currentTetromino,
@@ -41,7 +49,6 @@ function App() {
           setBoard,
           setOffset
         );
-        clearCompletedRows(board, currentTetromino, offset);
 
         // Spawn a new tetromino at the starting position
         spawnNewTetromino(setOffset, setBoard, { x: 5, y: 0 });
@@ -87,7 +94,6 @@ function App() {
         setBoard(renderState);
       }
     }
-    console.log(e);
   };
 
   return (

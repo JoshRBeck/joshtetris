@@ -20,6 +20,7 @@ export function spawnNewTetromino(
   // Reset the offset to the spawn position for the new tetromino
   setOffset(spawnPosition);
 
+
   // Update the board with the new tetromino
   updateBoardWithFrozenTetromino(
     Array.from({ length: BoardHeight }, () => Array(BoardWidth).fill(ShapeID.None)),
@@ -28,6 +29,7 @@ export function spawnNewTetromino(
     setBoard,
     setOffset
   );
+
 }
 
 
@@ -114,7 +116,7 @@ export function updateBoardWithFrozenTetromino(
 
 
 
-function getRandomShapeID(): ShapeID {
+export function getRandomShapeID(): ShapeID {
   const shapeIDs: ShapeID[] = [
     ShapeID.None,
     ShapeID.I,

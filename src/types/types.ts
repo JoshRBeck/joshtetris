@@ -21,7 +21,10 @@ export type TetrominoShape = {
   [ShapeID.O]: TetrominoMatrix;
   [ShapeID.Z]: TetrominoMatrix;
   [ShapeID.S]: TetrominoMatrix;
+
 };
+
+
 
 export const Shapes: TetrominoShape = {
   [ShapeID.None]: [
@@ -64,5 +67,5 @@ export const Shapes: TetrominoShape = {
     [0, 0, 0],
     [0, 1, 1],
     [1, 1, 0],
-  ],
+  ]
 };
