@@ -66,26 +66,6 @@ export function isValidMove(
   return false;
 }
 
-export function clearCompletedRows(
-  board: ShapeID[][],
-  tetromino: ShapeID[][],
-  offset: { x: number; y: number }
-) {
-  // Check if each row in the tetromino is complete
-  for (let i = 0; i < tetromino.length; i++) {
-    const rowToCheck = offset.y + i;
-    // Check if the row is within board bounds
-    if (rowToCheck >= 0 && rowToCheck < BoardHeight) {
-      const isRowComplete = board[rowToCheck].every(
-        (cell) => cell !== ShapeID.None
-      );
-      // If the row is complete, clear it by filling with ShapeID.none
-      if (isRowComplete) {
-        board[rowToCheck] = Array(BoardWidth).fill(ShapeID.None);
-      }
-    }
-  }
-}
 
 export function updateBoardWithFrozenTetromino(
   board: ShapeID[][],
